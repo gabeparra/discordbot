@@ -24,4 +24,16 @@ client.on('messageCreate', (message) => {
 	if (message.mentions.has(client.user.id) && message.content.includes('ping')) {
 		message.channel.send('I wanna eat some ass <@404060860752068619>');
 	}
+	if (message.mentions.has(client.user.id) && message.content.includes('can you suck it?')) {
+		message.channel.send('Whaat?');
+	}
+	if (message.mentions.has(client.user.id) && message.content.includes('Can you bless me?')) {
+		message.channel.send('Money wise');
+	}
+	if (message.mentions.has(client.user.id) && message.content.includes('prayer')) {
+		message.channel.send({ files: ['https://media.discordapp.net/attachments/539934160534372412/973009788810182696/IMG_8403.gif?width=667&height=805'] });
+	}
+	if (message.content.includes('we live we love we lie')) {
+		message.channel.send({ files: ['https://images-ext-2.discordapp.net/external/CV58HF9COOPBVP_QjECtpBKrvOba1VfvK5iKKVMzm2Y/https/media.tenor.com/gf_-X6I29z8AAAPo/smurf-cat-smurf.mp4'] });
+	}
 });
