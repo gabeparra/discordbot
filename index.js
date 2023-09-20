@@ -53,4 +53,11 @@ client.on("messageCreate", (message) => {
       ],
     });
   }
+  if (message.content.toLowerCase().includes("i need more bulles")) {
+    message.channel.send({
+      files: [
+        "https://media.discordapp.net/attachments/1077811415332700274/1147780275066118176/i-need-more-bullets.gif?width=345&height=747",
+      ],
+    });
+  }
 });
