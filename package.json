@@ -1,6 +1,7 @@
 {
   "dependencies": {
-    "discord.js": "^14.13.0"
+    "discord.js": "^14.13.0",
+    "superagent": "^8.1.2"
   },
   "name": "discordbot",
   "description": "Discord bot project",
