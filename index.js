@@ -60,4 +60,11 @@ client.on("messageCreate", (message) => {
       ],
     });
   }
+  if (message.content.toLowerCase().includes("mama ima criminal") || message.content.toLowerCase().includes("mama im a criminal")) {
+    message.channel.send({
+      files: [
+        "https://im.ezgif.com/tmp/ezgif-1-77191792b3.gif",
+      ],
+    });
+  }
 });
