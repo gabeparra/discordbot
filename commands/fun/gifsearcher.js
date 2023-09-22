@@ -1,5 +1,8 @@
+require('dotenv').config();
 const { SlashCommandBuilder } = require("discord.js")
 const superagent = require("superagent");
+
+
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -11,7 +14,7 @@ module.exports = {
 
         const {options}= Interaction;
         const query = options.getString('query');
-        const key = 'AIzaSyAtkoquDb5l1g20ssgoZjPwdzT7rLwV3o8';
+        const key = process.env.TENOR_API_KEY;
         const clientKey='discordbot';
         const lmt =7;
 
