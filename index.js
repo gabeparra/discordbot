@@ -31,12 +31,28 @@ for (const folder of commandFolders) {
 // When the client is ready, run this code (only once)
 client.once("ready", () => {
   console.log(`Ready! Logged in as ${client.user.tag}`);
+  
+  // Log the bot's clientId
+  console.log(`Client ID: ${client.user.id}`);
+  
+  // Log the IDs of all the guilds the bot is in
+  client.guilds.cache.forEach(guild => {
+    console.log(`Guild ID: ${guild.id}`);
+  });
 });
 
-client.on(Events.InteractionCreate, async interaction => {
-	if (!interaction.isChatInputCommand()) return;
 
-	const command = client.commands.get(interaction.commandName);
+
+client.on(Events.InteractionCreate, async interaction => {
+  if (!interaction.isChatInputCommand()) return;
+  // Get the guild from the interaction
+  const { guild } = interaction;
+  
+  // Log the guild ID
+  console.log(`Interaction received from guild: ${guild.id}`);
+
+  const command = client.commands.get(interaction.commandName);
+  
 
 	if (!command) return;
 
