@@ -1,23 +1,57 @@
 // Require the necessary discord.js classes
-const { Client, GatewayIntentBits } = require("discord.js");
+require('dotenv').config();
+const path = require('path');
+const fs = require('fs');
+const { Client, Collection, Events, GatewayIntentBits } = require("discord.js");
 const { token } = require("./config.json");
 
 // Create a new client instance
 const client = new Client({
-  intents: [
-    GatewayIntentBits.Guilds,
-    GatewayIntentBits.MessageContent,
-    GatewayIntentBits.GuildMessages,
-  ],
+  intents: [GatewayIntentBits.Guilds,GatewayIntentBits.MessageContent,GatewayIntentBits.GuildMessages,],
 });
+
+client.commands = new Collection();
+
+const foldersPath = path.join(__dirname, 'commands');
+const commandFolders = fs.readdirSync(foldersPath);
+for (const folder of commandFolders) {
+	const commandsPath = path.join(foldersPath, folder);
+	const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
+	for (const file of commandFiles) {
+		const filePath = path.join(commandsPath, file);
+		const command = require(filePath);
+		if ('data' in command && 'execute' in command) {
+			client.commands.set(command.data.name, command);
+		} else {
+			console.log(`[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`);
+		}
+	}
+}
 
 // When the client is ready, run this code (only once)
 client.once("ready", () => {
   console.log(`Ready! Logged in as ${client.user.tag}`);
 });
 
-// Log in to Discord with your client's token
-client.login(token);
+client.on(Events.InteractionCreate, async interaction => {
+	if (!interaction.isChatInputCommand()) return;
+
+	const command = client.commands.get(interaction.commandName);
+
+	if (!command) return;
+
+	try {
+		await command.execute(interaction);
+	} catch (error) {
+		console.error(error);
+		if (interaction.replied || interaction.deferred) {
+			await interaction.followUp({ content: 'There was an error while executing this command!', ephemeral: true });
+		} else {
+			await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
+		}
+	}
+});
+
 
 // Listen for messages and reply with 'pong' if the bot is tagged and the message is 'ping'
 client.on("messageCreate", (message) => {
@@ -41,9 +75,7 @@ client.on("messageCreate", (message) => {
   }
   if (message.content.toLowerCase().includes("prayer")) {
     message.channel.send({
-      files: [
-        "https://media.discordapp.net/attachments/539934160534372412/973009788810182696/IMG_8403.gif?width=667&height=805",
-      ],
+      files: [{attachment: "https://media.discordapp.net/attachments/539934160534372412/973009788810182696/IMG_8403.gif?width=667&height=805",name:'SPOILER_prayer.gif'}],
     });
   }
   if (message.content.toLowerCase().includes("we live we love we lie")) {
@@ -60,11 +92,15 @@ client.on("messageCreate", (message) => {
       ],
     });
   }
-  if (message.content.toLowerCase().includes("mama ima criminal") || message.content.toLowerCase().includes("mama im a criminal")) {
+  if (
+    message.content.toLowerCase().includes("mama ima criminal") ||
+    message.content.toLowerCase().includes("mama im a criminal")
+  ) {
     message.channel.send({
-      files: [
-        "https://im.ezgif.com/tmp/ezgif-1-77191792b3.gif",
-      ],
+      files: ["https://im.ezgif.com/tmp/ezgif-1-77191792b3.gif"],
     });
   }
 });
+
+// Log in to Discord with your client's token
+client.login(token);
