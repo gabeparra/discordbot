@@ -14,13 +14,13 @@ module.exports = {
 
         const {options}= Interaction;
         const query = options.getString('query');
-        const key = process.env.TENOR_API_KEY;
+        const key = 'AIzaSyAtkoquDb5l1g20ssgoZjPwdzT7rLwV3o8';
         const clientKey='discordbot';
         const lmt =7;
 
         let choice = Math.floor(Math.random() * lmt);
 
-        const link = "https://tenor.googleapis.com/v2/search?q=" + query + "&key=" + key + "&client_key=" + clientKey + "&limit="+lmt;
+        const link = 'https://tenor.googleapis.com/v2/search?q=' + query + '&key=' + key + '&client_key=' + clientKey + '&limit='+lmt;
 
         const output = await superagent.get(link).catch(err=>{});
         

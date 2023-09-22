@@ -11,6 +11,11 @@ FROM node:${NODE_VERSION}-alpine
 # Use production node environment by default.
 ENV NODE_ENV production
 
+# Load environment variables from .env file.
+ARG ENV_FILE
+ENV ENV_FILE ${ENV_FILE:-.env}
+COPY $ENV_FILE .env
+
 
 WORKDIR /usr/src/app
 
