@@ -2,15 +2,19 @@
 require('dotenv').config();
 const path = require('path');
 const fs = require('fs');
-const { Client, Collection, Events, GatewayIntentBits } = require("discord.js");
+const { Client: DiscordClient, Collection, Events, GatewayIntentBits } = require("discord.js");
 const { token } = require("./config.json");
+const { Pool, Client:PgClient } =require('pg');
+
 
 // Create a new client instance
-const client = new Client({
+const discordclient = new DiscordClient({
   intents: [GatewayIntentBits.Guilds,GatewayIntentBits.MessageContent,GatewayIntentBits.GuildMessages,],
 });
 
-client.commands = new Collection();
+discordclient.commands = new Collection();
+
+
 
 const foldersPath = path.join(__dirname, 'commands');
 const commandFolders = fs.readdirSync(foldersPath);
@@ -21,7 +25,7 @@ for (const folder of commandFolders) {
 		const filePath = path.join(commandsPath, file);
 		const command = require(filePath);
 		if ('data' in command && 'execute' in command) {
-			client.commands.set(command.data.name, command);
+			discordclient.commands.set(command.data.name, command);
 		} else {
 			console.log(`[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`);
 		}
@@ -29,21 +33,23 @@ for (const folder of commandFolders) {
 }
 
 // When the client is ready, run this code (only once)
-client.once("ready", () => {
-  console.log(`Ready! Logged in as ${client.user.tag}`);
+discordclient.once("ready", () => {
+  console.log(`Ready! Logged in as ${discordclient.user.tag}`);
   
   // Log the bot's clientId
-  console.log(`Client ID: ${client.user.id}`);
+  console.log(`Client ID: ${discordclient.user.id}`);
   
   // Log the IDs of all the guilds the bot is in
-  client.guilds.cache.forEach(guild => {
+  discordclient.guilds.cache.forEach(guild => {
     console.log(`Guild ID: ${guild.id}`);
   });
 });
 
 
 
-client.on(Events.InteractionCreate, async interaction => {
+
+
+discordclient.on(Events.InteractionCreate, async interaction => {
   if (!interaction.isChatInputCommand()) return;
   // Get the guild from the interaction
   const { guild } = interaction;
@@ -51,7 +57,7 @@ client.on(Events.InteractionCreate, async interaction => {
   // Log the guild ID
   console.log(`Interaction received from guild: ${guild.id}`);
 
-  const command = client.commands.get(interaction.commandName);
+  const command = discordclient.commands.get(interaction.commandName);
   
 
 	if (!command) return;
@@ -70,7 +76,7 @@ client.on(Events.InteractionCreate, async interaction => {
 
 
 // Listen for messages and reply with 'pong' if the bot is tagged and the message is 'ping'
-client.on("messageCreate", (message) => {
+discordclient.on("messageCreate", (message) => {
   if (message.author.bot) return false;
 
   if (
@@ -119,4 +125,4 @@ client.on("messageCreate", (message) => {
 });
 
 // Log in to Discord with your client's token
-client.login(token);
+discordclient.login(token);
