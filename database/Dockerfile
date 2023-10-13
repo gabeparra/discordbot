@@ -1,10 +1,5 @@
 # Use the official PostgreSQL image as the base
-FROM postgres:13
-
-# Set environment variables (if needed)
-ENV POSTGRES_DB=discordbot
-ENV POSTGRES_USER=postgres
-ENV POSTGRES_PASSWORD=160594
+FROM postgres:12
 
 # Copy custom configuration files into the container
 COPY ./postgresql.conf /var/lib/postgresql/data/postgresql.conf

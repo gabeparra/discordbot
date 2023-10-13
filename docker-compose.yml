@@ -5,20 +5,25 @@ services:
     build:
       context: ./database
       dockerfile: Dockerfile
-    image: postgres:13  # Pinning to a specific version for stability
+    image: postgres:12  # Pinning to a specific version for stability
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: 160594
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
       - "5432:5432"
     volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
       - pgdata:/var/lib/postgresql/data
+    env_file:
+      - .env
 
   discord:
     build:
       dockerfile: Dockerfile
     ports:
       - "3000:3000"
+    env_file:
+      - .env
 
 volumes:
   pgdata:
