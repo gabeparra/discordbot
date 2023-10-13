@@ -76,7 +76,7 @@ discordclient.on(Events.InteractionCreate, async interaction => {
 
 
 // Listen for messages and reply with 'pong' if the bot is tagged and the message is 'ping'
-discordclient.on("messageCreate", (message) => {
+discordclient.on("messageCreate", async (message) => {
   if (message.author.bot) return false;
 
   if (
@@ -121,6 +121,16 @@ discordclient.on("messageCreate", (message) => {
     message.channel.send({
       files: ["https://im.ezgif.com/tmp/ezgif-1-77191792b3.gif"],
     });
+  }
+  try {
+    await command.execute(interaction);
+  } catch (error) {
+    console.error(error);
+    if (interaction.replied || interaction.deferred) {
+      await interaction.followUp({ content: 'There was an error while executing this command!', ephemeral: true });
+    } else {
+      await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
+    }
   }
 });
 
