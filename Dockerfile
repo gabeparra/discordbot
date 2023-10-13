@@ -12,12 +12,11 @@ FROM node:${NODE_VERSION}-alpine
 ENV NODE_ENV production
 
 # Load environment variables from .env file.
-ARG ENV_FILE
-ENV ENV_FILE ${ENV_FILE:-.env}
-COPY $ENV_FILE .env
-
+#ARG ENV_FILE
+#ENV ENV_FILE ${ENV_FILE:-.env}
 
 WORKDIR /usr/src/app
+COPY . .
 
 # Download dependencies as a separate step to take advantage of Docker's caching.
 # Leverage a cache mount to /root/.npm to speed up subsequent builds.
@@ -32,10 +31,10 @@ RUN --mount=type=bind,source=package.json,target=package.json \
 USER node
 
 # Copy the rest of the source files into the image.
-COPY . .
 
 # Expose the port that the application listens on.
 EXPOSE 3000
+ENV HOST 0.0.0.0
 
 # Run the application.
-CMD node index.js
+    CMD node index.js
