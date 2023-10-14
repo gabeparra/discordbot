@@ -20,6 +20,13 @@ services:
   discord:
     build:
       dockerfile: Dockerfile
+    depends_on:
+      - postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      PGHOST: postgres
+      PGDATABASE: ${POSTGRES_DB}
     ports:
       - "3000:3000"
     env_file:
