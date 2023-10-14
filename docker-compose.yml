@@ -19,6 +19,7 @@ services:
 
   discord:
     build:
+      context: ./bot
       dockerfile: Dockerfile
     depends_on:
       - postgres

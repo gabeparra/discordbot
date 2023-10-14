@@ -1,33 +1,46 @@
 // Require the necessary discord.js classes
-require('dotenv').config();
-const path = require('path');
-const fs = require('fs');
-const { Client: DiscordClient, Collection, Events, GatewayIntentBits } = require("discord.js");
+require("dotenv").config();
+const path = require("path");
+const fs = require("fs");
+const {
+  Client: DiscordClient,
+  Collection,
+  Events,
+  GatewayIntentBits,
+} = require("discord.js");
 const { token } = require("./config.json");
-const { Pool, Client: PgClient } = require('pg');
-
+const { Pool, Client: PgClient } = require("pg");
 
 // Create a new client instance
 const discordclient = new DiscordClient({
-  intents: [GatewayIntentBits.Guilds, GatewayIntentBits.MessageContent, GatewayIntentBits.GuildMessages,GatewayIntentBits.GuildMembers,GatewayIntentBits.GuildMessageTyping,GatewayIntentBits.GuildMessageReactions,],
+  intents: [
+    GatewayIntentBits.Guilds,
+    GatewayIntentBits.MessageContent,
+    GatewayIntentBits.GuildMessages,
+    GatewayIntentBits.GuildMembers,
+    GatewayIntentBits.GuildMessageTyping,
+    GatewayIntentBits.GuildMessageReactions,
+  ],
 });
 
 discordclient.commands = new Collection();
 
-
-
-const foldersPath = path.join(__dirname, 'commands');
+const foldersPath = path.join(__dirname, "commands");
 const commandFolders = fs.readdirSync(foldersPath);
 for (const folder of commandFolders) {
   const commandsPath = path.join(foldersPath, folder);
-  const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
+  const commandFiles = fs
+    .readdirSync(commandsPath)
+    .filter((file) => file.endsWith(".js"));
   for (const file of commandFiles) {
     const filePath = path.join(commandsPath, file);
     const command = require(filePath);
-    if ('data' in command && 'execute' in command) {
+    if ("data" in command && "execute" in command) {
       discordclient.commands.set(command.data.name, command);
     } else {
-      console.log(`[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`);
+      console.log(
+        `[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`
+      );
     }
   }
 }
@@ -40,16 +53,12 @@ discordclient.once("ready", () => {
   console.log(`Client ID: ${discordclient.user.id}`);
 
   // Log the IDs of all the guilds the bot is in
-  discordclient.guilds.cache.forEach(guild => {
+  discordclient.guilds.cache.forEach((guild) => {
     console.log(`Guild ID: ${guild.id}`);
   });
 });
 
-
-
-
-
-discordclient.on(Events.InteractionCreate, async interaction => {
+discordclient.on(Events.InteractionCreate, async (interaction) => {
   if (!interaction.isChatInputCommand()) return;
   // Get the guild from the interaction
   const { guild } = interaction;
@@ -64,10 +73,8 @@ discordclient.on(Events.InteractionCreate, async interaction => {
     await command.execute(interaction);
   } catch (error) {
     console.error(error);
-    await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: false });
   }
 });
-
 
 // Listen for messages and reply with 'pong' if the bot is tagged and the message is 'ping'
 discordclient.on("messageCreate", async (message) => {
@@ -91,7 +98,13 @@ discordclient.on("messageCreate", async (message) => {
   }
   if (message.content.toLowerCase().includes("prayer")) {
     message.channel.send({
-      files: [{ attachment: "https://media.discordapp.net/attachments/539934160534372412/973009788810182696/IMG_8403.gif?width=667&height=805", name: 'SPOILER_prayer.gif' }],
+      files: [
+        {
+          attachment:
+            "https://media.discordapp.net/attachments/539934160534372412/973009788810182696/IMG_8403.gif?width=667&height=805",
+          name: "SPOILER_prayer.gif",
+        },
+      ],
     });
   }
   if (message.content.toLowerCase().includes("we live we love we lie")) {
@@ -125,9 +138,13 @@ discordclient.on("guildMemberAdd", async (guildMember) => {
   guildMember.send("Buss!");
 
   // Or send a message to a specific channel in the guild
-  const welcomeChannel = guildMember.guild.channels.cache.find(channel => channel.name.toLowerCase().includes("general"));
+  const welcomeChannel = guildMember.guild.channels.cache.find((channel) =>
+    channel.name.toLowerCase().includes("general")
+  );
   if (welcomeChannel) {
-    welcomeChannel.send(`Welcome ${guildMember.user.tag}, I wanna eat some ass.`);
+    welcomeChannel.send(
+      `Welcome ${guildMember.user.tag}, I wanna eat some ass.`
+    );
   }
 });
 
@@ -135,21 +152,28 @@ discordclient.on("guildMemberRemove", async (guildMember) => {
   console.log("One bitch has left");
 
   // Try to find a channel named "general"
-  let generalChannel = guildMember.guild.channels.cache.find(channel => channel.name.toLowerCase().includes("general"));
+  let generalChannel = guildMember.guild.channels.cache.find((channel) =>
+    channel.name.toLowerCase().includes("general")
+  );
 
   // If not found, try to find the first text channel that everyone has permission to send messages in
   if (!generalChannel) {
-    generalChannel = guildMember.guild.channels.cache.find(channel =>
-      channel.type === "GUILD_TEXT" &&
-      channel.permissionsFor(guildMember.guild.roles.everyone).has('SEND_MESSAGES')
+    generalChannel = guildMember.guild.channels.cache.find(
+      (channel) =>
+        channel.type === "GUILD_TEXT" &&
+        channel
+          .permissionsFor(guildMember.guild.roles.everyone)
+          .has("SEND_MESSAGES")
     );
   }
 
   // Send a message if a suitable channel is found
   if (generalChannel) {
-    generalChannel.send(`${guildMember.user.tag} has left the server. Fuck you, you stupid.`);
+    generalChannel.send(
+      `${guildMember.user.tag} has left the server. Fuck you, you stupid.`
+    );
   }
 });
 
 // Log in to Discord with your client's token
-discordclient.login(token);
+discordclient.login(process.env.CLIENTTOKEN);
