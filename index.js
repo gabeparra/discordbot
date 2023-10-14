@@ -118,7 +118,7 @@ discordclient.on("messageCreate", async (message) => {
   }
 });
 
-discordclient.on('guildMemberAdd', guildMember => {
+discordclient.on('guildMemberAdd', async (guildMember) => {
   console.log("Guild Member joined");
 
   // Send a direct message to the new member
@@ -131,7 +131,7 @@ discordclient.on('guildMemberAdd', guildMember => {
   }
 });
 
-discordclient.on('guildMemberRemove', guildMember => {
+discordclient.on('guildMemberRemove', async (guildMember) => {
   console.log("One bitch has left");
 
   // Try to find a channel named "general"
@@ -150,8 +150,6 @@ discordclient.on('guildMemberRemove', guildMember => {
     generalChannel.send(`${guildMember.user.tag} has left the server. Fuck you, you stupid.`);
   }
 });
-
-
 
 // Log in to Discord with your client's token
 discordclient.login(token);
