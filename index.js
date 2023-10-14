@@ -9,7 +9,7 @@ const { Pool, Client: PgClient } = require('pg');
 
 // Create a new client instance
 const discordclient = new DiscordClient({
-  intents: [GatewayIntentBits.Guilds, GatewayIntentBits.MessageContent, GatewayIntentBits.GuildMessages,],
+  intents: [GatewayIntentBits.Guilds, GatewayIntentBits.MessageContent, GatewayIntentBits.GuildMessages,GatewayIntentBits.GuildMembers,],
 });
 
 discordclient.commands = new Collection();
@@ -118,7 +118,7 @@ discordclient.on("messageCreate", async (message) => {
   }
 });
 
-discordclient.on('guildMemberAdd', async (guildMember) => {
+discordclient.on("guildMemberAdd", async (guildMember) => {
   console.log("Guild Member joined");
 
   // Send a direct message to the new member
@@ -131,7 +131,7 @@ discordclient.on('guildMemberAdd', async (guildMember) => {
   }
 });
 
-discordclient.on('guildMemberRemove', async (guildMember) => {
+discordclient.on("guildMemberRemove", async (guildMember) => {
   console.log("One bitch has left");
 
   // Try to find a channel named "general"
