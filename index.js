@@ -9,7 +9,7 @@ const { Pool, Client: PgClient } = require('pg');
 
 // Create a new client instance
 const discordclient = new DiscordClient({
-  intents: [GatewayIntentBits.Guilds, GatewayIntentBits.MessageContent, GatewayIntentBits.GuildMessages,GatewayIntentBits.GuildMembers,],
+  intents: [GatewayIntentBits.Guilds, GatewayIntentBits.MessageContent, GatewayIntentBits.GuildMessages,GatewayIntentBits.GuildMembers,GatewayIntentBits.GuildMessageTyping,GatewayIntentBits.GuildMessageReactions,],
 });
 
 discordclient.commands = new Collection();
@@ -125,7 +125,7 @@ discordclient.on("guildMemberAdd", async (guildMember) => {
   guildMember.send("Buss!");
 
   // Or send a message to a specific channel in the guild
-  const welcomeChannel = guildMember.guild.channels.cache.find(channel => channel.name === "general");
+  const welcomeChannel = guildMember.guild.channels.cache.find(channel => channel.name.toLowerCase().includes("general"));
   if (welcomeChannel) {
     welcomeChannel.send(`Welcome ${guildMember.user.tag}, I wanna eat some ass.`);
   }
@@ -135,7 +135,7 @@ discordclient.on("guildMemberRemove", async (guildMember) => {
   console.log("One bitch has left");
 
   // Try to find a channel named "general"
-  let generalChannel = guildMember.guild.channels.cache.find(channel => channel.name === "general" && channel.type === "GUILD_TEXT");
+  let generalChannel = guildMember.guild.channels.cache.find(channel => channel.name.toLowerCase().includes("general"));
 
   // If not found, try to find the first text channel that everyone has permission to send messages in
   if (!generalChannel) {
