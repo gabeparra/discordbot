@@ -122,7 +122,7 @@ client.on('guildMemberAdd', guildMember => {
   console.log("Guild Member joined");
 
   // Send a direct message to the new member
-  guildMember.send("Welcome to our server!");
+  guildMember.send("Buss!");
 
   // Or send a message to a specific channel in the guild
   const welcomeChannel = guildMember.guild.channels.cache.find(channel => channel.name === "general");
@@ -130,6 +130,27 @@ client.on('guildMemberAdd', guildMember => {
     welcomeChannel.send(`Welcome ${guildMember.user.tag}, I wanna eat some ass.`);
   }
 });
+
+client.on('guildMemberRemove', guildMember => {
+  console.log("One bitch has left");
+
+  // Try to find a channel named "general"
+  let generalChannel = guildMember.guild.channels.cache.find(channel => channel.name === "general" && channel.type === "GUILD_TEXT");
+
+  // If not found, try to find the first text channel that everyone has permission to send messages in
+  if (!generalChannel) {
+    generalChannel = guildMember.guild.channels.cache.find(channel => 
+      channel.type === "GUILD_TEXT" &&
+      channel.permissionsFor(guildMember.guild.roles.everyone).has('SEND_MESSAGES')
+    );
+  }
+
+  // Send a message if a suitable channel is found
+  if (generalChannel) {
+    generalChannel.send(`${guildMember.user.tag} has left the server. Fuck you, you stupid.`);
+  }
+});
+
 
 
 // Log in to Discord with your client's token
