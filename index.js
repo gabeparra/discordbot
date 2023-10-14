@@ -118,5 +118,19 @@ discordclient.on("messageCreate", async (message) => {
   }
 });
 
+client.on('guildMemberAdd', guildMember => {
+  console.log("Guild Member joined");
+
+  // Send a direct message to the new member
+  guildMember.send("Welcome to our server!");
+
+  // Or send a message to a specific channel in the guild
+  const welcomeChannel = guildMember.guild.channels.cache.find(channel => channel.name === "general");
+  if (welcomeChannel) {
+    welcomeChannel.send(`Welcome ${guildMember.user.tag}, I wanna eat some ass.`);
+  }
+});
+
+
 // Log in to Discord with your client's token
 discordclient.login(token);

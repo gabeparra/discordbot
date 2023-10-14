@@ -34,7 +34,7 @@ module.exports = {
             await client.query('COMMIT');
             const currentValue = parseInt(res.rows[0].value, 10) || 0;
             // Send the final response
-            await interaction.reply('Money has been added! New total '+[currentValue + 50]);
+            await interaction.reply('Money has been added! New total $'+[currentValue + 50]+' goon coin.');
         } catch (err) {
             await client.query('ROLLBACK');
             console.error('Error processing transaction', err);
