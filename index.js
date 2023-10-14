@@ -118,7 +118,7 @@ discordclient.on("messageCreate", async (message) => {
   }
 });
 
-client.on('guildMemberAdd', guildMember => {
+discordclient.on('guildMemberAdd', guildMember => {
   console.log("Guild Member joined");
 
   // Send a direct message to the new member
@@ -131,7 +131,7 @@ client.on('guildMemberAdd', guildMember => {
   }
 });
 
-client.on('guildMemberRemove', guildMember => {
+discordclient.on('guildMemberRemove', guildMember => {
   console.log("One bitch has left");
 
   // Try to find a channel named "general"
@@ -139,7 +139,7 @@ client.on('guildMemberRemove', guildMember => {
 
   // If not found, try to find the first text channel that everyone has permission to send messages in
   if (!generalChannel) {
-    generalChannel = guildMember.guild.channels.cache.find(channel => 
+    generalChannel = guildMember.guild.channels.cache.find(channel =>
       channel.type === "GUILD_TEXT" &&
       channel.permissionsFor(guildMember.guild.roles.everyone).has('SEND_MESSAGES')
     );
