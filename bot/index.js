@@ -8,8 +8,6 @@ const {
   Events,
   GatewayIntentBits,
 } = require("discord.js");
-const { token } = require("./config.json");
-const { Pool, Client: PgClient } = require("pg");
 
 // Create a new client instance
 const discordclient = new DiscordClient({
@@ -95,6 +93,9 @@ discordclient.on("messageCreate", async (message) => {
   }
   if (message.content.toLowerCase().includes("can you bless me?")) {
     message.channel.send("Money wise");
+  }
+  if (message.content.toLowerCase().includes("god")) {
+    message.channel.send("On god.");
   }
   if (message.content.toLowerCase().includes("prayer")) {
     message.channel.send({
