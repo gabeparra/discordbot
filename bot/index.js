@@ -97,6 +97,9 @@ discordclient.on("messageCreate", async (message) => {
   if (message.content.toLowerCase().includes("god")) {
     message.channel.send("On god.");
   }
+  if (message.content.toLowerCase().includes("allah")) {
+    message.channel.send("Mashallah.");
+  }
   if (message.content.toLowerCase().includes("prayer")) {
     message.channel.send({
       files: [
@@ -108,7 +111,7 @@ discordclient.on("messageCreate", async (message) => {
       ],
     });
   }
-  if (
+  /* if (
     message.content.toLowerCase().includes("goon")
   ) {
     message.channel.send({
@@ -117,10 +120,11 @@ discordclient.on("messageCreate", async (message) => {
           attachment:
             "https://media.discordapp.net/attachments/922115343877546034/1154379690438565959/153551090-1.gif?ex=654388dd&is=653113dd&hm=1690535d24024743e8fcf8825b4559fa2948373402e1123148c5ff2beeeb18c1&=",
           name: "SPOILER_goon.gif",
+          size: 20,
         }
       ],
     });
-  }
+  } */
   if (message.content.toLowerCase().includes("live" || "love" || "lie")) {
     message.channel.send({
       files: [
@@ -135,6 +139,7 @@ discordclient.on("messageCreate", async (message) => {
       ],
     });
   }
+
   if (
     message.content.toLowerCase().includes("criminal")
   ) {
