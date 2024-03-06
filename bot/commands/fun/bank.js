@@ -22,19 +22,19 @@ module.exports = {
         // Start a transaction
         const client = await pool.connect();
         try {
+            await interaction.deferReply();
             await client.query('BEGIN');
-
+            let currentValue = 0;
             const res = await client.query('SELECT value FROM guild_member_data WHERE guild_id = $1 AND member_id = $2 FOR UPDATE', [guildId, memberId]);
             if (res.rows.length > 0) {
-                const currentValue = parseInt(res.rows[0].value, 10) || 0;
+                currentValue = parseInt(res.rows[0].value, 10);
                 await client.query('UPDATE guild_member_data SET value = $1 WHERE guild_id = $2 AND member_id = $3', [currentValue + 50, guildId, memberId]);
             } else {
                 await client.query('INSERT INTO guild_member_data (guild_id, member_id, value) VALUES ($1, $2, $3)', [guildId, memberId, '50']);
             }
             await client.query('COMMIT');
-            const currentValue = parseInt(res.rows[0].value, 10) || 0;
             // Send the final response
-            await interaction.editReply('Money has been added! New total $'+[currentValue + 50]+' goon coin.');
+            await interaction.editReply('Money has been added! New total $' + [currentValue + 50] + ' goon coin.');
         } catch (err) {
             await client.query('ROLLBACK');
             console.error('Error processing transaction', err);

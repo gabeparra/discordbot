@@ -8,8 +8,6 @@ const {
   Events,
   GatewayIntentBits,
 } = require("discord.js");
-const { token } = require("./config.json");
-const { Pool, Client: PgClient } = require("pg");
 
 // Create a new client instance
 const discordclient = new DiscordClient({
@@ -88,13 +86,19 @@ discordclient.on("messageCreate", async (message) => {
     return false;
 
   if (message.content.toLowerCase().includes("ping")) {
-    message.channel.send("I wanna eat some ass <@404060860752068619>");
+    message.channel.send("I wanna eat some ass");
   }
   if (message.content.toLowerCase().includes("can you suck it?")) {
     message.channel.send("Whaat?");
   }
   if (message.content.toLowerCase().includes("can you bless me?")) {
     message.channel.send("Money wise");
+  }
+  if (message.content.toLowerCase().includes("god")) {
+    message.channel.send("On god.");
+  }
+  if (message.content.toLowerCase().includes("allah")) {
+    message.channel.send("Mashallah.");
   }
   if (message.content.toLowerCase().includes("prayer")) {
     message.channel.send({
@@ -107,7 +111,21 @@ discordclient.on("messageCreate", async (message) => {
       ],
     });
   }
-  if (message.content.toLowerCase().includes("we live we love we lie")) {
+  /* if (
+    message.content.toLowerCase().includes("goon")
+  ) {
+    message.channel.send({
+      files: [
+        {
+          attachment:
+            "https://media.discordapp.net/attachments/922115343877546034/1154379690438565959/153551090-1.gif?ex=654388dd&is=653113dd&hm=1690535d24024743e8fcf8825b4559fa2948373402e1123148c5ff2beeeb18c1&=",
+          name: "SPOILER_goon.gif",
+          size: 20,
+        }
+      ],
+    });
+  } */
+  if (message.content.toLowerCase().includes("live" || "love" || "lie")) {
     message.channel.send({
       files: [
         "https://images-ext-2.discordapp.net/external/CV58HF9COOPBVP_QjECtpBKrvOba1VfvK5iKKVMzm2Y/https/media.tenor.com/gf_-X6I29z8AAAPo/smurf-cat-smurf.mp4",
@@ -121,14 +139,15 @@ discordclient.on("messageCreate", async (message) => {
       ],
     });
   }
+
   if (
-    message.content.toLowerCase().includes("mama ima criminal") ||
-    message.content.toLowerCase().includes("mama im a criminal")
+    message.content.toLowerCase().includes("criminal")
   ) {
     message.channel.send({
       files: ["https://im.ezgif.com/tmp/ezgif-1-77191792b3.gif"],
     });
   }
+
 });
 
 discordclient.on("guildMemberAdd", async (guildMember) => {

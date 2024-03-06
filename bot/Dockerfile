@@ -27,6 +27,8 @@ RUN --mount=type=bind,source=package.json,target=package.json \
     --mount=type=cache,target=/root/.npm \
     npm ci --omit=dev
 
+RUN apk add --no-cache ffmpeg
+
 # Run the application as a non-root user.
 USER node
 
