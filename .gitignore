@@ -1,4 +1,8 @@
-node_modules
+node_modules/
 .env
+.env.*
+!.env.example
 config.json
-init.sql
+*.log
+.DS_Store
+coverage/

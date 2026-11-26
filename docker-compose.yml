@@ -1,36 +1,36 @@
-version: '3'
-
 services:
   postgres:
-    build:
-      context: ./database
-      dockerfile: Dockerfile
-    image: postgres:12  # Pinning to a specific version for stability
+    image: postgres:16-alpine
+    restart: unless-stopped
     environment:
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-    ports:
-      - "5432:5432"
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}
+      POSTGRES_DB: ${POSTGRES_DB:-discordbot}
     volumes:
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
       - pgdata:/var/lib/postgresql/data
-    env_file:
-      - .env
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-discordbot}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
 
   discord:
     build:
+      context: .
       dockerfile: Dockerfile
+    restart: unless-stopped
     depends_on:
-      - postgres
-    environment:
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      PGHOST: postgres
-      PGDATABASE: ${POSTGRES_DB}
-    ports:
-      - "3000:3000"
+      postgres:
+        condition: service_healthy
     env_file:
       - .env
+    environment:
+      PGHOST: postgres
+      PGPORT: 5432
+      PGUSER: ${POSTGRES_USER:-postgres}
+      PGPASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}
+      PGDATABASE: ${POSTGRES_DB:-discordbot}
 
 volumes:
   pgdata:

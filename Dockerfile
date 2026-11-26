@@ -1,40 +1,20 @@
 # syntax=docker/dockerfile:1
 
-# Comments are provided throughout this file to help you get started.
-# If you need more help, visit the Dockerfile reference guide at
-# https://docs.docker.com/engine/reference/builder/
+ARG NODE_VERSION=22-alpine
 
-ARG NODE_VERSION=20.7.0
+FROM node:${NODE_VERSION}
 
-FROM node:${NODE_VERSION}-alpine
-
-# Use production node environment by default.
-ENV NODE_ENV production
-
-# Load environment variables from .env file.
-#ARG ENV_FILE
-#ENV ENV_FILE ${ENV_FILE:-.env}
+ENV NODE_ENV=production
 
 WORKDIR /usr/src/app
-COPY . .
 
-# Download dependencies as a separate step to take advantage of Docker's caching.
-# Leverage a cache mount to /root/.npm to speed up subsequent builds.
-# Leverage a bind mounts to package.json and package-lock.json to avoid having to copy them into
-# into this layer.
-RUN --mount=type=bind,source=package.json,target=package.json \
-    --mount=type=bind,source=package-lock.json,target=package-lock.json \
-    --mount=type=cache,target=/root/.npm \
-    npm ci --omit=dev
+COPY package.json package-lock.json ./
+RUN npm ci --omit=dev
 
-# Run the application as a non-root user.
+COPY index.js deploy-commands.js ./
+COPY src ./src
+COPY commands ./commands
+
 USER node
 
-# Copy the rest of the source files into the image.
-
-# Expose the port that the application listens on.
-EXPOSE 3000
-ENV HOST 0.0.0.0
-
-# Run the application.
-    CMD node index.js
+CMD ["node", "index.js"]
