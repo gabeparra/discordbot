@@ -1,19 +1,16 @@
 {
-  "dependencies": {
-    "discord.js": "^14.13.0",
-    "dotenv": "^16.3.1",
-    "pg": "^8.11.3",
-    "superagent": "^8.1.2"
-  },
   "name": "discordbot",
-  "description": "Discord bot project",
-  "version": "1.0.0",
+  "version": "1.1.0",
+  "description": "Discord bot with slash commands, Tenor GIF search, and PostgreSQL-backed daily rewards",
   "main": "index.js",
-  "devDependencies": {
-    "eslint": "^8.49.0"
+  "engines": {
+    "node": ">=20.0.0"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js",
+    "deploy-commands": "node deploy-commands.js",
+    "lint": "eslint .",
+    "test": "node --test tests/*.test.js"
   },
   "repository": {
     "type": "git",
@@ -21,12 +18,24 @@
   },
   "keywords": [
     "discord",
-    "bot"
+    "discord-bot",
+    "discordjs",
+    "postgresql"
   ],
   "author": "Gabriel Parra, Maria Hernandez, Jhon Tabio",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/gabeparra/discordbot/issues"
   },
-  "homepage": "https://github.com/gabeparra/discordbot#readme"
+  "homepage": "https://github.com/gabeparra/discordbot#readme",
+  "dependencies": {
+    "discord.js": "^14.16.3",
+    "dotenv": "^16.4.7",
+    "pg": "^8.13.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.15.0",
+    "globals": "^15.14.0"
+  }
 }
